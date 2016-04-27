@@ -1,12 +1,12 @@
 {
 	"short_name": "Meal Planner",
 	"name": "Meal Planner",
-	"description": "A meal planner app",
-	"start_url": "/index.html",
-	"launch_path": "/index.html",
+	"start_url": "/meal-planner/index.html",
 	"display": "standalone",
 	"orientation": "portrait",
-	"icons": {
-		"128": "/icon.png"
-	}
+	"icons": [ {
+		"src": "/icon.png",
+		"sizes": "128x128",
+		"type": "image/png"
+	} ]
 }

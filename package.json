@@ -9,7 +9,7 @@
     "build": "webpack",
     "build-prod": "rm -rf ./build/; NODE_ENV=production webpack",
     "lint": "eslint ./src/",
-    "watch": "webpack -w"
+    "watch": "webpack -w --progress"
   },
   "keywords": [],
   "author": "",
@@ -24,12 +24,15 @@
     "eslint": "^2.8.0",
     "eslint-plugin-react": "^5.0.1",
     "lodash": "^4.11.1",
-    "material-ui": "^0.15.0-alpha.2",
+    "material-ui": "^0.15.0-beta.2",
+    "material-ui-dialogs": "0.0.2",
     "nedb-promise": "^2.0.0",
     "react": "^15.0.1",
     "react-addons-update": "^15.0.1",
     "react-dom": "^15.0.1",
-    "react-tap-event-plugin": "^1.0.0"
+    "react-frame-layout": "0.0.1",
+    "react-tap-event-plugin": "^1.0.0",
+    "webpack": "^1.13.0"
   },
   "dependencies": {
     "express": "^4.13.4"

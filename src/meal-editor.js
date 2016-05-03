@@ -1,18 +1,17 @@
+import { Frame } from 'react-frame-layout'
 import React from 'react'
 import update from 'react-addons-update'
 
-import FlatButton from 'material-ui/lib/flat-button'
-import MenuItem from 'material-ui/lib/menus/menu-item'
-import RaisedButton from 'material-ui/lib/raised-button'
-import SelectField from 'material-ui/lib/select-field'
-import TextField from 'material-ui/lib/text-field'
+import FlatButton from 'material-ui/FlatButton'
+import MenuItem from 'material-ui/MenuItem'
+import SelectField from 'material-ui/SelectField'
+import TextField from 'material-ui/TextField'
 
-export default class MealEditor extends React.Component {
+export default class MealEditor extends Frame {
 	constructor(props) {
 		super(props)
 		this.state = props.meal || {
 			name: 'New Meal',
-			ingredients: [ ],
 			season: 'any',
 		}
 	}
@@ -24,37 +23,16 @@ export default class MealEditor extends React.Component {
 	}
 
 	async saveMeal() {
-		await this.props.meals.update({ _id: this.state._id || 'no-such-id' }, this.state, { upsert: true })
-		this.props.parent.pop()
+		await this.context.mealStore.update({ _id: this.state._id || 'no-such-id' }, this.state, { upsert: true })
+		this.pop()
 	}
 
 	render() {
 		return <div>
-			<h2>Meal Editor</h2>
+			<h2>{this.state.name || '(untitled)'}</h2>
 
 			<div><TextField ref="name" hintText="Name" floatingLabelText="Name" value={this.state.name} onChange={e => this.setState(update(this.state, {
 				name: { $set: e.target.value },
-			}))} /></div>
-
-			{this.state.ingredients.map((ingredient, i) => <div key={i} style={{ padding: '15px 0' }}>
-					<h3>Ingredient {i + 1}</h3>
-
-					<div><TextField value={ingredient.name} hintText="Name" floatingLabelText="Name" onChange={e => this.setState(update(this.state, {
-						ingredients: { $apply: arr => (arr[i].name = e.target.value, arr) },
-					}))}/></div>
-
-					<div><TextField value={ingredient.quantity} hintText="Quantity" floatingLabelText="Quantity" onChange={e => this.setState(update(this.state, {
-						ingredients: { $apply: arr => (arr[i].quantity = e.target.value, arr) },
-					}))} /></div>
-
-					<div><RaisedButton label="Remove" onClick={() => this.setState(update(this.state, {
-						ingredients: { $splice: [ [ i, 1 ] ] },
-					}))} /></div>
-				</div>)}
-			{this.state.ingredients.length ? null : <div style={{ padding: '15px 0' }}><i>No ingredients</i></div>}
-
-			<div><RaisedButton label="Add Ingredient" onClick={() => this.setState(update(this.state, {
-				ingredients: { $push: [ { name: `Ingredient ${this.state.ingredients.length + 1}`, quantity: '' } ] },
 			}))} /></div>
 
 			<h3>Season</h3>
@@ -68,9 +46,12 @@ export default class MealEditor extends React.Component {
 			</SelectField>
 
 			<div style={{ textAlign: 'right' }}>
-				<FlatButton label="Cancel" secondary={true} onClick={() => this.props.parent.pop()} />&nbsp;
+				<FlatButton label="Cancel" secondary={true} onClick={() => this.pop()} />&nbsp;
 				<FlatButton label="Save" primary={true} onClick={this.saveMeal.bind(this)} />
 			</div>
 		</div>
 	}
 }
+MealEditor.contextTypes = Object.assign({
+	mealStore: React.PropTypes.object,
+}, MealEditor.contextTypes)

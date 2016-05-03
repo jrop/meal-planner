@@ -11,6 +11,7 @@
 	"rules": {
 		"react/jsx-uses-react": 1,
 		"react/jsx-uses-vars": 1,
+		"react/jsx-no-undef": 2,
 		"no-alert": 0,
 		"no-array-constructor": 0,
 		"no-bitwise": 0,

@@ -5,7 +5,7 @@
 	"display": "standalone",
 	"orientation": "portrait",
 	"icons": [ {
-		"src": "/icon.png",
+		"src": "/meal-planner/icon.png",
 		"sizes": "128x128",
 		"type": "image/png"
 	} ]

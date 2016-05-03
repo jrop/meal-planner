@@ -1,7 +1,7 @@
 import { Frame } from 'react-frame-layout'
 import React from 'react'
 
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
+import { Card, CardActions, CardHeader } from 'material-ui/Card'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FlatButton from 'material-ui/FlatButton'
 import FloatingActionButton from 'material-ui/FloatingActionButton'

@@ -2,6 +2,7 @@ import { Frame } from 'react-frame-layout'
 import React from 'react'
 import update from 'react-addons-update'
 
+import Checkbox from 'material-ui/Checkbox'
 import FlatButton from 'material-ui/FlatButton'
 import MenuItem from 'material-ui/MenuItem'
 import SelectField from 'material-ui/SelectField'
@@ -12,7 +13,11 @@ export default class MealEditor extends Frame {
 		super(props)
 		this.state = props.meal || {
 			name: 'New Meal',
-			season: 'any',
+			season: {
+				freezing: true,
+				cold: true,
+				warm: true,
+			},
 		}
 	}
 
@@ -36,14 +41,15 @@ export default class MealEditor extends Frame {
 			}))} /></div>
 
 			<h3>Season</h3>
-			<SelectField ref="season" value={this.state.season} onChange={(e, i, value) => this.setState(update(this.state, {
-				season: { $set: value },
-			}))}>
-				<MenuItem value="any" primaryText="Any" />
-				<MenuItem value="freezing" primaryText="Freezing" />
-				<MenuItem value="cold" primaryText="Cold" />
-				<MenuItem value="warm" primaryText="Warm" />
-			</SelectField>
+			<div><Checkbox label="Freezing" checked={this.state.season.freezing} onCheck={(e, checked) => this.setState(update(this.state, {
+				season: { freezing: { $set: checked } },
+			}))} /></div>
+			<div><Checkbox label="Cold" checked={this.state.season.cold} onCheck={(e, checked) => this.setState(update(this.state, {
+				season: { cold: { $set: checked } },
+			}))} /></div>
+			<div><Checkbox label="Warm" checked={this.state.season.warm} onCheck={(e, checked) => this.setState(update(this.state, {
+				season: { warm: { $set: checked } },
+			}))} /></div>
 
 			<div style={{ textAlign: 'right' }}>
 				<FlatButton label="Cancel" secondary={true} onClick={() => this.pop()} />&nbsp;

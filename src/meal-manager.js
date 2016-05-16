@@ -1,3 +1,4 @@
+import dialogs from 'material-ui-dialogs'
 import { Frame } from 'react-frame-layout'
 import React from 'react'
 
@@ -18,7 +19,7 @@ class Meal extends Frame {
 	}
 
 	async onRemoveClick() {
-		if (!confirm('Are you sure?')) { return }
+		if (!await dialogs.confirm('Are you sure?')) { return }
 		await this.context.mealStore.remove({ _id: this.state.meal._id }, { })
 		this.props.onReload()
 	}
@@ -29,9 +30,15 @@ class Meal extends Frame {
 
 	render() {
 		const meal = this.state.meal
+		const seasons = _.chain(meal.season)
+			.pickBy(value => value === true)
+			.keys()
+			.map(_.capitalize)
+			.value()
+			.join(', ')
 		return <div style={{ margin: '15px 0' }}>
 			<Card>
-				<CardHeader title={meal.name} subtitle={`Season: ${_.capitalize(meal.season)}`} actAsExpander={true} />
+				<CardHeader title={meal.name} subtitle={`Season(s): ${seasons}`} actAsExpander={true} />
 				<CardActions expandable={true}>
 					<FlatButton label="Remove" secondary={true} onClick={this.onRemoveClick.bind(this)} />
 					<FlatButton label="Edit" primary={true} onClick={this.onEditClick.bind(this)} />
@@ -47,7 +54,7 @@ Meal.contextTypes = Object.assign({
 export default class MealManager extends Frame {
 	constructor(props) {
 		super(props)
-		this.state = { meals: [ ] }
+		this.state = { meals: [ ], isSelected: true }
 	}
 
 	componentDidMount() {
@@ -63,6 +70,10 @@ export default class MealManager extends Frame {
 		this.push(<Padded><MealEditor onReload={() => this.loadData()} /></Padded>)
 	}
 
+	setSelected(isSelected) {
+		this.setState({ isSelected })
+	}
+
 	render() {
 		return <div>
 			{this.state.meals ?
@@ -70,13 +81,11 @@ export default class MealManager extends Frame {
 				this.state.meals.map(meal => <Meal onReload={() => this.loadData()} meal={meal} key={meal.name} parent={this} />) :
 				<i>No meals</i>
 			: <i>Loading...</i>}
-			<div style={{ textAlign: 'right' }}>
-				<FloatingActionButton
-					style={{ /* position: 'fixed', bottom: 15, right: 15 */ }}
-					onClick={this.addNewMeal.bind(this)}>
-					<ContentAdd />
-				</FloatingActionButton>
-			</div>
+			<FloatingActionButton
+				style={{ position: 'fixed', bottom: 15, right: 15, display: this.state.isSelected ? 'block' : 'none' }}
+				onClick={this.addNewMeal.bind(this)}>
+				<ContentAdd />
+			</FloatingActionButton>
 		</div>
 	}
 }

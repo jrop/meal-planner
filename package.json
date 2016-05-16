@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./build/",
-    "build": "webpack",
-    "build-prod": "rm -rf ./build/; NODE_ENV=production webpack",
+    "build": "webpack --progress",
+    "build-prod": "rm -rf ./build/; NODE_ENV=production webpack --progress",
     "lint": "eslint ./src/",
     "watch": "webpack -w --progress"
   },

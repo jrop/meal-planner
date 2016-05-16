@@ -14,10 +14,19 @@ import MealManager from './meal-manager'
 import MealPlanner from './meal-planner'
 import Padded from './padded'
 
-const Main = () => <Tabs>
-	<Tab label="Meals"><Padded><MealManager /></Padded></Tab>
-	<Tab label="Planner"><Padded><MealPlanner /></Padded></Tab>
-</Tabs>
+class Main extends React.Component {
+	onTabChange(value) {
+		this.refs.mealManager.setSelected(value == 'manager')
+		this.refs.mealPlanner.setSelected(value == 'planner')
+	}
+
+	render() {
+		return <Tabs ref="tabs" onChange={this.onTabChange.bind(this)}>
+			<Tab label="Meals" value="manager"><Padded><MealManager ref="mealManager"/></Padded></Tab>
+			<Tab label="Planner" value="planner"><Padded><MealPlanner ref="mealPlanner" /></Padded></Tab>
+		</Tabs>
+	}
+}
 
 class App extends FrameLayout {
 	constructor(props) {

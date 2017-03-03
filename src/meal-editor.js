@@ -30,6 +30,7 @@ export default class MealEditor extends React.Component {
 	async saveMeal() {
 		await this.context.mealStore.update({_id: this.state._id || 'no-such-id'}, this.state, {upsert: true})
 		this.context.stack.pop()
+		this.props.parent.loadData()
 	}
 
 	render() {

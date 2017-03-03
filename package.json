@@ -35,7 +35,7 @@
     "react-dom": "^15.0.1",
     "react-tap-event-plugin": "^2.0.1",
     "webpack": "^2.2.1",
-    "webpack-configify": "^0.0.2",
+    "webpack-configify": "^0.0.3",
     "webpack-dev-server": "^2.4.1"
   }
 }

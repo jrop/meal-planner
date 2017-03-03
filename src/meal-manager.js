@@ -23,7 +23,7 @@ class Meal extends React.Component {
 	}
 
 	async onEditClick() {
-		this.context.stack.push(<MealEditor meal={this.state.meal} />)
+		this.context.stack.push(<MealEditor parent={this.props.parent} meal={this.state.meal} />)
 	}
 
 	render() {
@@ -66,7 +66,7 @@ export default class MealManager extends React.Component {
 	}
 
 	async addNewMeal() {
-		this.context.stack.push(<MealEditor onReload={() => this.loadData()} />)
+		this.context.stack.push(<MealEditor parent={this} onReload={() => this.loadData()} />)
 	}
 
 	setSelected(isSelected) {

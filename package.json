@@ -37,5 +37,6 @@
     "webpack": "^2.2.1",
     "webpack-configify": "^0.0.3",
     "webpack-dev-server": "^2.4.1"
-  }
+  },
+  "files": ["build/index.js", "icon.png", "index.html", "manifest.json"]
 }

@@ -1,33 +1,20 @@
-'use strict'
-
-const path = require('path')
-const webpack = require('webpack')
+const builder = require('webpack-configify').default
 
 const prod = process.env.NODE_ENV == 'production'
 
-module.exports = {
-	entry: './src/index.js',
-	output: {
-		path: './build',
-		filename: 'index.js',
-	},
-	devtool: prod ? null : 'source-map',
-	module: {
-		loaders: [ {
-			test: /\.jsx?$/,
-			include: [ path.resolve(__dirname, 'src') ],
-			loader: 'babel',
-		}, {
-			test: /\.less$/,
-			loader: 'style-loader!css-loader!less-loader',
-		} ],
-	},
-	plugins: prod ? [ new webpack.optimize.UglifyJsPlugin({
-		comments: false,
-		compress: {
-			dead_code: true,
-			warnings: false,
+module.exports = builder()
+	.production(prod)
+	.development(!prod)
+
+	.src('./src/index.js')
+	.dest('./build', '/build/')
+	.merge({
+		module: {
+			loaders: [{
+				test: /\.js/,
+				include: [`${__dirname}/src`],
+				loader: 'babel-loader',
+			}],
 		},
-		mangle: true,
-	}) ] : [ ],
-}
+	})
+	.build()

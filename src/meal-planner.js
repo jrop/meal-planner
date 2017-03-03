@@ -1,11 +1,10 @@
-import { Frame } from 'react-frame-layout'
 import moment from 'moment'
 import random from 'random-js'
 import React from 'react'
 
 import _ from 'lodash'
 
-export default class MealPlanner extends Frame {
+export default class MealPlanner extends React.Component {
 	componentDidMount() {
 		this.loadData()
 	}
@@ -17,8 +16,8 @@ export default class MealPlanner extends Frame {
 	}
 
 	async loadData() {
-		const [ meals, forecasts ] = await Promise.all([ this.context.mealStore.find({}), this.getForecasts() ])
-		this.setState({ meals, forecasts })
+		const [meals, forecasts] = await Promise.all([this.context.mealStore.find({}), this.getForecasts()])
+		this.setState({meals, forecasts})
 	}
 
 	setSelected(selected) {
@@ -67,7 +66,7 @@ export default class MealPlanner extends Frame {
 			return <div><i>Loading...</i></div>
 		return <div>
 			{this.state.forecasts.map((forecast, i) => <div key={i}>
-				<h3 style={{ fontWeight: '400' }}>{forecast.day} - {forecast.high}&deg;<sup><small><small>F</small></small></sup></h3>
+				<h3 style={{fontWeight: '400'}}>{forecast.day} - {forecast.high}&deg;<sup><small><small>F</small></small></sup></h3>
 				<p>Weather: {forecast.text} ({this.classifyTempurature(forecast.high).toString()})</p>
 				<p>Meal: {this.pickMeal(forecast.high, randomGenerator)}</p>
 			</div>)}

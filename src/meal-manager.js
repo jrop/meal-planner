@@ -1,31 +1,29 @@
-import dialogs from 'material-ui-dialogs'
-import { Frame } from 'react-frame-layout'
+import * as dialogs from 'material-ui-dialogs'
 import React from 'react'
 
-import { Card, CardActions, CardHeader } from 'material-ui/Card'
+import {Card, CardActions, CardHeader} from 'material-ui/Card'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FlatButton from 'material-ui/FlatButton'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import MealEditor from './meal-editor'
-import Padded from './padded'
 
 import _ from 'lodash'
 
-class Meal extends Frame {
+class Meal extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { meal: props.meal }
+		this.state = {meal: props.meal}
 	}
 
 	async onRemoveClick() {
 		if (!await dialogs.confirm('Are you sure?')) { return }
-		await this.context.mealStore.remove({ _id: this.state.meal._id }, { })
+		await this.context.mealStore.remove({_id: this.state.meal._id}, { })
 		this.props.onReload()
 	}
 
 	async onEditClick() {
-		this.push(<Padded><MealEditor meal={this.state.meal} /></Padded>)
+		this.context.stack.push(<MealEditor meal={this.state.meal} />)
 	}
 
 	render() {
@@ -36,7 +34,7 @@ class Meal extends Frame {
 			.map(_.capitalize)
 			.value()
 			.join(', ')
-		return <div style={{ margin: '15px 0' }}>
+		return <div style={{margin: '15px 0'}}>
 			<Card>
 				<CardHeader title={meal.name} subtitle={`Season(s): ${seasons}`} actAsExpander={true} />
 				<CardActions expandable={true}>
@@ -47,14 +45,15 @@ class Meal extends Frame {
 		</div>
 	}
 }
-Meal.contextTypes = Object.assign({
+Meal.contextTypes = {
 	mealStore: React.PropTypes.object,
-}, Meal.contextTypes)
+	stack: React.PropTypes.object,
+}
 
-export default class MealManager extends Frame {
+export default class MealManager extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { meals: [ ], isSelected: true }
+		this.state = {meals: [], isSelected: true}
 	}
 
 	componentDidMount() {
@@ -63,15 +62,15 @@ export default class MealManager extends Frame {
 
 	async loadData() {
 		const meals = _.sortBy(await this.context.mealStore.find({}), 'name')
-		this.setState({ meals })
+		this.setState({meals})
 	}
 
 	async addNewMeal() {
-		this.push(<Padded><MealEditor onReload={() => this.loadData()} /></Padded>)
+		this.context.stack.push(<MealEditor onReload={() => this.loadData()} />)
 	}
 
 	setSelected(isSelected) {
-		this.setState({ isSelected })
+		this.setState({isSelected})
 	}
 
 	render() {
@@ -82,13 +81,14 @@ export default class MealManager extends Frame {
 				<i>No meals</i>
 			: <i>Loading...</i>}
 			<FloatingActionButton
-				style={{ position: 'fixed', bottom: 15, right: 15, display: this.state.isSelected ? 'block' : 'none' }}
+				style={{position: 'fixed', bottom: 15, right: 15, display: this.state.isSelected ? 'block' : 'none'}}
 				onClick={this.addNewMeal.bind(this)}>
 				<ContentAdd />
 			</FloatingActionButton>
 		</div>
 	}
 }
-MealManager.contextTypes = Object.assign({
+MealManager.contextTypes = {
 	mealStore: React.PropTypes.object,
-}, MealManager.contextTypes)
+	stack: React.PropTypes.object,
+}
